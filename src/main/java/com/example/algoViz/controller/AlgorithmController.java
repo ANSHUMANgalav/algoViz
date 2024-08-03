@@ -2,29 +2,28 @@ package com.example.algoViz.controller;
 
 import com.example.algoViz.service.AlgorithmService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
+@RequestMapping("/algorithm")
+@CrossOrigin(origins = "http://localhost:3000")
 public class AlgorithmController {
 
     @Autowired
     private AlgorithmService algorithmService;
 
-    @GetMapping("/algorithm/bubbleSort")
+    @GetMapping("/bubbleSort")
     public int[][] bubbleSort(@RequestParam int[] array) {
         return algorithmService.bubbleSort(array);
     }
 
-    @GetMapping("/algorithm/mergeSort")
+    @GetMapping("/mergeSort")
     public int[][] mergeSort(@RequestParam int[] array) {
         return algorithmService.mergeSort(array);
     }
 
-    @GetMapping("/algorithm/quickSort")
+    @GetMapping("/quickSort")
     public int[][] quickSort(@RequestParam int[] array) {
         return algorithmService.quickSort(array);
     }

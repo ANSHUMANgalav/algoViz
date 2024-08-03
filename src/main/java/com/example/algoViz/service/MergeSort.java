@@ -1,27 +1,34 @@
 package com.example.algoViz.service;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@Service
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+@Component
 public class MergeSort {
 
     public int[][] sort(int[] array) {
-        int[][] steps = new int[1000][array.length]; // Adjust the size based on expected steps
-        int[] stepIndex = {0};
-        mergeSort(array, 0, array.length - 1, steps, stepIndex);
-        return steps;
+        List<int[]> steps = new ArrayList<>();
+        if (array != null && array.length > 0) {
+            int[] arrCopy = Arrays.copyOf(array, array.length);
+            mergeSortHelper(arrCopy, 0, arrCopy.length - 1, steps);
+        }
+        return convertStepsToArray(steps);
     }
 
-    private void mergeSort(int[] array, int left, int right, int[][] steps, int[] stepIndex) {
+    private void mergeSortHelper(int[] array, int left, int right, List<int[]> steps) {
         if (left < right) {
             int mid = (left + right) / 2;
-            mergeSort(array, left, mid, steps, stepIndex);
-            mergeSort(array, mid + 1, right, steps, stepIndex);
-            merge(array, left, mid, right, steps, stepIndex);
+            mergeSortHelper(array, left, mid, steps);
+            mergeSortHelper(array, mid + 1, right, steps);
+            merge(array, left, mid, right, steps);
         }
     }
 
-    private void merge(int[] array, int left, int mid, int right, int[][] steps, int[] stepIndex) {
+    private void merge(int[] array, int left, int mid, int right, List<int[]> steps) {
         int n1 = mid - left + 1;
         int n2 = right - mid;
 
@@ -32,6 +39,7 @@ public class MergeSort {
         System.arraycopy(array, mid + 1, R, 0, n2);
 
         int i = 0, j = 0, k = left;
+
         while (i < n1 && j < n2) {
             if (L[i] <= R[j]) {
                 array[k] = L[i];
@@ -40,23 +48,30 @@ public class MergeSort {
                 array[k] = R[j];
                 j++;
             }
-            steps[stepIndex[0]++] = array.clone();
+            steps.add(Arrays.copyOf(array, array.length));
             k++;
         }
 
         while (i < n1) {
             array[k] = L[i];
-            steps[stepIndex[0]++] = array.clone();
             i++;
             k++;
+            steps.add(Arrays.copyOf(array, array.length));
         }
 
         while (j < n2) {
             array[k] = R[j];
-            steps[stepIndex[0]++] = array.clone();
             j++;
             k++;
+            steps.add(Arrays.copyOf(array, array.length));
         }
     }
-}
 
+    private int[][] convertStepsToArray(List<int[]> steps) {
+        int[][] stepsArray = new int[steps.size()][];
+        for (int i = 0; i < steps.size(); i++) {
+            stepsArray[i] = steps.get(i);
+        }
+        return stepsArray;
+    }
+}

@@ -6,14 +6,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class AlgorithmService {
 
-    @Autowired
-    private BubbleSort bubbleSort;
+    private final BubbleSort bubbleSort;
+    private final MergeSort mergeSort;
+    private final QuickSort quickSort;
 
     @Autowired
-    private MergeSort mergeSort;
-
-    @Autowired
-    private QuickSort quickSort;
+    public AlgorithmService(BubbleSort bubbleSort, MergeSort mergeSort, QuickSort quickSort) {
+        this.bubbleSort = bubbleSort;
+        this.mergeSort = mergeSort;
+        this.quickSort = quickSort;
+    }
 //
 //    @Autowired
 //    private AStar aStar;
